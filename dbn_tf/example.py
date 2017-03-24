@@ -11,6 +11,7 @@ p = [1, 4, 6, 3, 8]
 # print k
 
 print np.array(p).shape[0]
+print p[-1]
 
 # rand = tf.random_uniform([500])
 # value = tf.nn.relu(rand)
