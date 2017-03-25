@@ -13,6 +13,16 @@ p = [1, 4, 6, 3, 8]
 print np.array(p).shape[0]
 print p[-1]
 
+ks = []
+for v in range(500):
+    # k = np.random.uniform(0, 1, 784)
+    ks.append(np.random.uniform(0, 1, 784))
+print np.array(ks).shape
+
+ks = np.array(ks)
+for i in ks:
+    print i.shape
+
 # rand = tf.random_uniform([500])
 # value = tf.nn.relu(rand)
 # sess = tf.Session()
