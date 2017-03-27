@@ -93,8 +93,8 @@ for epoch in range(training_epochs):
     if epoch % display_step == 0:
         print("Epoch:", '%04d' % (epoch + 1), "cost=", "{:.9f}".format(c))
 
-saver.save(sess, 'autoencoder')
-print("Optimization Finished!")
+# saver.save(sess, 'autoencoder')
+# print("Optimization Finished!")
 
 # Applying encode and decode over test set
 print teX.shape
