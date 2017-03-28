@@ -64,8 +64,7 @@ class NN(object):
         cost = tf.reduce_mean(tf.square(_a[-1] - y))
 
         # Define the training operation (Momentum Optimizer minimizing the Cost function)
-        train_op = tf.train.MomentumOptimizer(
-            self._learning_rate, self._momentum).minimize(cost)
+        train_op = tf.train.MomentumOptimizer(self._learning_rate, self._momentum).minimize(cost)
 
         # Prediction operation
         predict_op = tf.argmax(_a[-1], 1)
@@ -82,15 +81,13 @@ class NN(object):
                 for start, end in zip(
                         range(0, len(self._X), self._batchsize), range(self._batchsize, len(self._X), self._batchsize)):
                     # Run the training operation on the input data
-                    sess.run(train_op, feed_dict={
-                        _a[0]: self._X[start:end], y: self._Y[start:end]})
+                    sess.run(train_op, feed_dict={_a[0]: self._X[start:end], y: self._Y[start:end]})
 
                 for j in range(len(self._sizes) + 1):
                     # Retrieve weights and biases
                     self.w_list[j] = sess.run(_w[j])
                     self.b_list[j] = sess.run(_b[j])
 
-                print "Accuracy rating for epoch " + str(i) + ": " + str(np.mean(np.argmax(self._Y, axis=1) ==
-                                                                                 sess.run(predict_op,
-                                                                                          feed_dict={_a[0]: self._X,
-                                                                                                     y: self._Y})))
+                print "Accuracy rating for epoch " + str(i) + ": " \
+                      + str(np.mean(np.argmax(self._Y, axis=1)
+                                    == sess.run(predict_op, feed_dict={_a[0]: self._X, y: self._Y})))

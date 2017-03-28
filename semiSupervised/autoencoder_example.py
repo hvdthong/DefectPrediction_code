@@ -34,13 +34,14 @@ trX, trY, teX, teY = mnist.train.images, mnist.train.labels, mnist.test.images, 
 
 learning_rate = 0.01
 batch_size = 256
-training_epochs = 20
+training_epochs = 5
 display_step = 1
 examples_to_show = 10
 
+n_input = 784
 n_hidden_1 = 256
 n_hidden_2 = 128
-n_input = 784
+
 
 X = tf.placeholder('float', [None, n_input])
 weights = {
@@ -97,12 +98,14 @@ for epoch in range(training_epochs):
 # print("Optimization Finished!")
 
 # Applying encode and decode over test set
-print teX.shape
-decoder_ = sess.run(y_pred, feed_dict={X: teX})
-print decoder_.shape
+# print teX.shape
+# decoder_ = sess.run(y_pred, feed_dict={X: teX})
+# print decoder_.shape
 
-encoder_ = sess.run(encoder_op, feed_dict={X: teX})
+encoder_ = sess.run(encoder_op, feed_dict={X: trX})
 print encoder_.shape
+
+
 
 
 # # Compare original images with their reconstructions
