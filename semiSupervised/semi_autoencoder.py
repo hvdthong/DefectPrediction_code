@@ -36,7 +36,7 @@ plt.plot(ae.costs_un[0::100])
 plt.xlabel('Batch Number')
 plt.ylabel('Error')
 plt.legend(['Total Cost', 'Unsupervised Cost', 'Supervised Cost'], loc='upper right')
-plt.show()
+# plt.show()
 plt.savefig('CostIteration.jpg')
 
 # plt.plot(ae.costs_su)
