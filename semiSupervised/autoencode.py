@@ -67,6 +67,8 @@ class autoencoder(object):
 
         init = tf.initialize_all_variables()
         sess = tf.InteractiveSession()
+        write = tf.summary.FileWriter("./tb/1")
+        write.add_graph(sess.graph)
         sess.run(init)
         # launch the graph
 
@@ -99,6 +101,7 @@ class autoencoder(object):
             if epoch % self.display_step == 0:
                 print("Epoch:", '%04d' % (epoch + 1), "cost=", "{:.9f}".format(c))
 
+
         print("optimization finished!!")
 
         correct_prediction = tf.equal(tf.argmax(y_pred, 1), tf.argmax(y_true, 1))
@@ -118,6 +121,7 @@ class autoencoder(object):
         encoder_ = self.encoder(input_)
         with tf.Session() as sess:
             sess.run(tf.initialize_all_variables())
+
             return sess.run(encoder_)
 
 
