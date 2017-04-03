@@ -11,6 +11,7 @@ class RBM(object):
         self.epochs = epochs  # Amount of training iterations
         self.learning_rate = learning_rate  # The step used in gradient descent
         self.batchsize = batchsize  # The size of how much data will be used for training per sub iteration
+        self.errors = []
 
         # Initializing weights and biases as matrices full of zeroes
         self.w = np.zeros([input_size, output_size], np.float32)  # Creates and initializes the weights with 0
@@ -37,7 +38,8 @@ class RBM(object):
         _hb = tf.placeholder("float", [self._output_size])
         _vb = tf.placeholder("float", [self._input_size])
 
-        prv_w = np.zeros([self._input_size, self._output_size], np.float32)  # Creates and initializes the weights with 0
+        prv_w = np.zeros([self._input_size, self._output_size],
+                         np.float32)  # Creates and initializes the weights with 0
         prv_hb = np.zeros([self._output_size], np.float32)  # Creates and initializes the hidden biases with 0
         prv_vb = np.zeros([self._input_size], np.float32)  # Creates and initializes the visible biases with 0
 
@@ -62,6 +64,9 @@ class RBM(object):
 
         # Find the error rate
         err = tf.reduce_mean(tf.square(v0 - v1))
+        errors = []
+
+        total_batch = int(X.shape[0] / self.batchsize)
 
         # Training loop
         with tf.Session() as sess:
@@ -69,24 +74,31 @@ class RBM(object):
             # For each epoch
             for epoch in range(self.epochs):
                 # For each step/batch
-                for start, end in zip(range(0, len(X), self.batchsize), range(self.batchsize, len(X), self.batchsize)):
-                    batch = X[start:end]
+                # for start, end in zip(range(0, len(X), self.batchsize), range(self.batchsize, len(X), self.batchsize)):
+                for i in range(total_batch):
+
+                    # batch_xs = X[i * batch_size:(i + 1) * batch_size]
+                    # batch_ys = Y[i * batch_size:(i + 1) * batch_size]
+                    batch = X[i * self.batchsize:(i + 1) * self.batchsize]
                     # Update the rates
                     cur_w = sess.run(update_w, feed_dict={v0: batch, _w: prv_w, _hb: prv_hb, _vb: prv_vb})
                     cur_hb = sess.run(update_hb, feed_dict={v0: batch, _w: prv_w, _hb: prv_hb, _vb: prv_vb})
                     cur_vb = sess.run(update_vb, feed_dict={v0: batch, _w: prv_w, _hb: prv_hb, _vb: prv_vb})
+                    errors.append(sess.run(err, feed_dict={v0: batch, _w: prv_w, _hb: prv_hb, _vb: prv_vb}))
                     prv_w = cur_w
                     prv_hb = cur_hb
                     prv_vb = cur_vb
+
                 error = sess.run(err, feed_dict={v0: X, _w: cur_w, _vb: cur_vb, _hb: cur_hb})
                 print 'Epoch: %d' % epoch, 'reconstruction error: %f' % error
             self.w = prv_w
             self.hb = prv_hb
             self.vb = prv_vb
+            self.errors = errors
 
     # Create expected output for our DBN
     def rbm_outpt(self, X):
-        input_X = tf.constant(X)
+        input_X = tf.constant(X, np.float32)
         _w = tf.constant(self.w)
         _hb = tf.constant(self.hb)
         out = tf.nn.sigmoid(tf.matmul(input_X, _w) + _hb)

@@ -2,6 +2,8 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow.examples.tutorials.mnist import input_data
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
 # Building the encoder
@@ -42,7 +44,6 @@ n_input = 784
 n_hidden_1 = 256
 n_hidden_2 = 128
 
-
 X = tf.placeholder('float', [None, n_input])
 weights = {
     'encoder_h1': tf.Variable(tf.random_normal([n_input, n_hidden_1])),
@@ -73,7 +74,8 @@ optimizer = tf.train.RMSPropOptimizer(learning_rate).minimize(cost)
 saver = tf.train.Saver()
 
 # Initializing the variables
-init = tf.initialize_all_variables()
+# init = tf.initialize_all_variables()
+init = tf.global_variables_initializer()
 
 # Launch the graph
 # Using InteractiveSession (more convenient while using Notebooks)
