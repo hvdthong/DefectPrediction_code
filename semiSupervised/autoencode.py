@@ -65,10 +65,10 @@ class autoencoder(object):
 
         optimizer = tf.train.RMSPropOptimizer(self.learning_rate).minimize(total_cost)
 
-        init = tf.initialize_all_variables()
+        init = tf.global_variables_initializer()
         sess = tf.InteractiveSession()
-        write = tf.summary.FileWriter("./tb/1")
-        write.add_graph(sess.graph)
+        # write = tf.summary.FileWriter("./tb/1")
+        # write.add_graph(sess.graph)
         sess.run(init)
         # launch the graph
 
@@ -99,7 +99,7 @@ class autoencoder(object):
             weights_.append({'encoder_h1': w_encode, 'decoder_h1': w_decode})
             # display logs per epoch step
             if epoch % self.display_step == 0:
-                print("Epoch:", '%04d' % (epoch + 1), "cost=", "{:.9f}".format(c))
+                print("Epoch:", '%04d' % (epoch + 1), "cost={:.9f}".format(c))
 
 
         print("optimization finished!!")

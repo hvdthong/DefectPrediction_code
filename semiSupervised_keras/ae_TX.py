@@ -1,6 +1,7 @@
 from keras.layers import Input, Dense
 from keras.models import Model
 import os
+import matplotlib.pyplot as plt
 
 # from keras.utils.visualize_util import plot
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
@@ -21,10 +22,11 @@ ae = Model(input_img, outputs=[decoded1, decoded2])
 losses = dict()
 losses['decode1'] = 'binary_crossentropy'
 losses['decode2'] = 'mse'
-weights_ =[2.0, 0.3 ]
+weights_ = [2.0, 0.3]
 
 ae.compile(optimizer='sgd', loss=losses, loss_weights=weights_)
 from keras.utils import plot_model
+
 plot_model(ae, to_file='ae.png', show_shapes=True)
 # this model maps an input to its reconstruction
 # autoencoder = Model(input_img, decoded)
@@ -47,7 +49,7 @@ plot_model(ae, to_file='ae.png', show_shapes=True)
 from keras.datasets import mnist
 import numpy as np
 
-(x_train, _), (x_test, _) = mnist.load_data()
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
 
 x_train = x_train.astype('float32') / 255.
 x_test = x_test.astype('float32') / 255.
@@ -59,12 +61,15 @@ out_data = dict()
 out_data['decode1'] = x_train
 out_data['decode2'] = x_train
 
+total = np.sum(y_train.values())
+print total
+exit()
+
 in_test = dict()
 in_test['in0'] = x_test
 out_test = dict()
 out_test['decode1'] = x_test
 out_test['decode2'] = x_test
-
 
 # print x_train.shape, x_test.shape
 # print y_train.shape, y_test.shape
@@ -73,11 +78,13 @@ out_test['decode2'] = x_test
 # print y_train[0:10]
 # exit()
 
-ae.fit(  # x_train, x_train,
-    in_data, out_data,
-    epochs=5,
-    batch_size=256,
-    shuffle=True, validation_data=(in_test, out_test))
+model = ae.fit(in_data, out_data, epochs=5, batch_size=256, shuffle=True
+               , validation_data=(in_test, out_test))
+
+losses_ = model.history['loss']
+decode1_loss = model.history['decode1_loss']
+print losses_
+print type(losses_)
 # validation_data=(x_test, x_test))
 
 # encode and decode some digits

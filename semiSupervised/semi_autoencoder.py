@@ -25,19 +25,19 @@ ae.train(trX, trY, teX, teY)
 
 # print ae.encoderOp.shape
 # print ae.decoderOp.shape
-# k = ae.weights_out
-# print ae.weights_out.shape
+k = ae.weights_out
+print k.shape
 
 # print ae.costs
 
-plt.plot(ae.costs[0::100])
-plt.plot(ae.costs_su[0::100])
-plt.plot(ae.costs_un[0::100])
-plt.xlabel('Batch Number')
-plt.ylabel('Error')
-plt.legend(['Total Cost', 'Unsupervised Cost', 'Supervised Cost'], loc='upper right')
-# plt.show()
-plt.savefig('CostIteration.jpg')
+# plt.plot(ae.costs[0::100])
+# plt.plot(ae.costs_su[0::100])
+# plt.plot(ae.costs_un[0::100])
+# plt.xlabel('Batch Number')
+# plt.ylabel('Error')
+# plt.legend(['Total Cost', 'Unsupervised Cost', 'Supervised Cost'], loc='upper right')
+# # plt.show()
+# plt.savefig('CostIteration.jpg')
 
 # plt.plot(ae.costs_su)
 # plt.xlabel('Batch Number')
